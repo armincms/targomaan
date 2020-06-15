@@ -8,20 +8,15 @@ use Armincms\Targomaan\Concerns\InteractsWithTargomaan;
 
 class Product extends Model implements Translatable
 { 
-	use InteractsWithTargomaan; 
-
+	use InteractsWithTargomaan;  
+	
 	/**
-	 * Driver name of the targomaan.
+	 * Driver name of the Targomaan.
 	 * 
 	 * @return [type] [description]
 	 */
 	public function translator(): string
 	{
-		return 'separate';
-	}
-
-	public function translations()
-	{
-		return $this->hasMany(ProductTranslation::class);
-	}
+		return 'layeric';
+	} 
 }

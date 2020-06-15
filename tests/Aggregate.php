@@ -4,7 +4,7 @@ namespace Armincms\Targomaan\Tests;
 
 use Orchestra\Testbench\TestCase;
 
-class AggregateTest extends TestCase
+class Aggregate extends TestCase
 {
 	/**
 	 * Setup the test environment.

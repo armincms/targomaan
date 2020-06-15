@@ -2,6 +2,7 @@
 
 namespace Armincms\Targomaan\Tests\Fixtures;
 
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Armincms\Targomaan\Contracts\Translatable;
 use Armincms\Targomaan\Concerns\InteractsWithTargomaan;
@@ -17,11 +18,25 @@ class Page extends Model implements Translatable
 	 */
 	public function translator(): string
 	{
-		return 'assoc';
-	}
+		return 'sequential';
+	} 
 
-	public function translations()
-	{
-		return $this->hasMany(static::class, 'assoc_key', 'assoc_key');
-	}
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+    	'order' => 'float'
+    ];
+
+    public function setTitleAttribute($name)
+    {
+    	$this->attributes['title'] = Str::upper($name);
+    }
+
+    public function getTitleAttribute($title)
+    {
+    	return Str::title($title);
+    }
 }

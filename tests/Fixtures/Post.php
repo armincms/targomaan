@@ -2,23 +2,15 @@
 
 namespace Armincms\Targomaan\Tests\Fixtures;
 
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Armincms\Targomaan\Contracts\Translatable;
 use Armincms\Targomaan\Concerns\InteractsWithTargomaan;
 
 class Post extends Model implements Translatable
 { 
-	use InteractsWithTargomaan;
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-    	'name' => 'json',
-    ];
-
+	use InteractsWithTargomaan;  
+	
 	/**
 	 * Driver name of the targomaan.
 	 * 
@@ -27,5 +19,10 @@ class Post extends Model implements Translatable
 	public function translator(): string
 	{
 		return 'json';
+	}
+
+	public function getTitleAttribute($value)
+	{
+		return Str::title($value);
 	}
 }

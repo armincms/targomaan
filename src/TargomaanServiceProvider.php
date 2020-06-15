@@ -22,7 +22,7 @@ class TargomaanServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('targoman', function($app) {
+        $this->app->singleton('targomaan', function($app) {
             return new Targomaan($app);
         });
     }

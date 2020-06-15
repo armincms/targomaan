@@ -5,8 +5,8 @@ namespace Armincms\Targomaan;
 use InvalidArgumentException;
 use Armincms\Targomaan\Contracts\Translator;
 use Armincms\Targomaan\Translators\JsonTranslator;
-use Armincms\Targomaan\Translators\AssocTranslator;
-use Armincms\Targomaan\Translators\SeparateTranslator;
+use Armincms\Targomaan\Translators\SequentialTranslator;
+use Armincms\Targomaan\Translators\LayericTranslator;
 use Illuminate\Support\Manager;
  
 class Targomaan extends Manager
@@ -43,7 +43,7 @@ class Targomaan extends Manager
     }
 
     /**
-     * Create JSON driver instance.
+     * Create the JSON driver instance.
      * 
      * @return mixed
      *
@@ -55,26 +55,26 @@ class Targomaan extends Manager
     }
 
     /**
-     * Create Assoc driver instance.
+     * Create Sequential driver instance.
      * 
      * @return mixed
      *
      * @throws \InvalidArgumentException
      */
-    public function createAssocDriver()
+    public function createSequentialDriver()
     {
-        return new AssocTranslator;
+        return new SequentialTranslator;
     }
 
     /**
-     * Create Separate driver instance.
+     * Create the Layeric driver instance.
      * 
      * @return mixed
      *
      * @throws \InvalidArgumentException
      */
-    public function createSeparateDriver()
+    public function createLayericDriver()
     {
-        return new SeparateTranslator;
+        return new LayericTranslator;
     }
 } 

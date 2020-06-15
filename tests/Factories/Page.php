@@ -8,7 +8,8 @@ use Faker\Generator as Faker;
 $factory->define(Page::class, function (Faker $faker) {
     return [
         'name' 		=> $faker->name, 
-        'language' 	=> 'fa',
-        'assoc_key' => $faker->md5
+        'title'		=> $faker->title, 
+        'locale' 	=> 'en',
+        'sequence_key' => $faker->md5
     ];
 });

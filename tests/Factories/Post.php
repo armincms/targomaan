@@ -7,9 +7,9 @@ use Faker\Generator as Faker;
 
 $factory->define(Post::class, function (Faker $faker) {
     return [
-        'name' => [
+        'name' => json_encode([
         	'fa' => $faker->name,
         	'en' => $faker->name,
-        ]
+        ])
     ];
 });

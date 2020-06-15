@@ -16,8 +16,9 @@ class CreateProductTranslationsTable extends Migration
         Schema::create('product_translations', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('product_id'); 
-            $table->string('language')->default('fa'); 
-            $table->string('name');
+            $table->string('locale')->default('fa'); 
+            $table->string('name')->nullable();
+            $table->string('title')->nullable();
             $table->timestamps();
 
             $table->foreign('product_id')->references('id')->on('products');
