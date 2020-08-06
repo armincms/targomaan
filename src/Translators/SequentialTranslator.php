@@ -7,6 +7,23 @@ use Armincms\Targomaan\Contracts\Translator;
  
 class SequentialTranslator implements Translator
 {  
+	/**
+	 * Hanldle saving event.
+	 * 
+	 * @param  \Illuminate\Database\Eloquent\Model $model 
+	 * @return         
+	 */
+	public function saving($model)
+	{ 
+		$model::unguarded(function() use ($model) {  
+			$sequenceKey = $this->getSequenceKeyName($model);
+
+			if(empty($model->{$sequenceKey})) {
+				$model->setAttribute($this->getSequenceKeyName($model), md5(time()));
+			} 
+		});
+	}
+
 	public function saved($model)
 	{  
 		$models = collect($model->getHidden())->filter()->map(function($attributes, $locale) use ($model) { 
