@@ -2,6 +2,7 @@
 
 namespace Armincms\Targomaan\Concerns;
 
+use Illuminate\Database\Eloquent\Scope;
 use Armincms\Targomaan\Contracts\Translator;
 use Illuminate\Support\Str;
 use Closure;
@@ -29,7 +30,9 @@ trait InteractsWithTargomaan
      */
     public static function bootInteractsWithTargomaan()
     { 
-        static::observe((new static)->targomaan());
+        static::observe($targomaan = (new static)->targomaan());
+
+        $targomaan instanceof Scope && static::addGlobalScope($targomaan); 
     }   
 
     /**
