@@ -24,6 +24,12 @@ class SequentialTranslator implements Translator
 		});
 	}
 
+	/**
+	 * Hanldle saved event.
+	 * 
+	 * @param  \Illuminate\Database\Eloquent\Model $model 
+	 * @return         
+	 */
 	public function saved($model)
 	{  
 		$models = collect($model->getHidden())->filter()->map(function($attributes, $locale) use ($model) { 
@@ -114,6 +120,7 @@ class SequentialTranslator implements Translator
     /**
      * Get the name of the "sequence key" column.
      *
+	 * @param  \Illuminate\Database\Eloquent\Model $model 
      * @return string
      */
 	protected function getSequenceKeyName($model) : string
@@ -124,6 +131,7 @@ class SequentialTranslator implements Translator
     /**
      * Get the name of the "locale" column.
      *
+	 * @param  \Illuminate\Database\Eloquent\Model $model 
      * @return string
      */
 	protected function getLocaleKeyName($model) : string
