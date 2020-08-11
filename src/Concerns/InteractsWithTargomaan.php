@@ -65,16 +65,13 @@ trait InteractsWithTargomaan
     		list($key, $locale) = explode(static::delimiter(), $key);
 
     		return $this->targomaan()->getTranslation($this, $key, $locale);
-    	}   
+    	}
 
-        if(static::shouldTranslation()&&
-           ! method_exists($this, $key) && 
-           ! is_null($translation = $this->getAttribute($this->localizeKey($key))) 
-        ) {
-            return $translation;  
-        } 
+        if(is_null($value = parent::getAttribute($key)) && static::shouldTranslation()) { 
+            return $this->getAttribute($this->localizeKey($key));
+        }  
 
-        return parent::getAttribute($key);
+        return $value;
     } 
 
     /**
