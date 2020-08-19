@@ -195,4 +195,14 @@ trait InteractsWithTargomaan
     {
     	return app('targomaan')->driver($this->translator());
     } 
+
+    /**
+     * Get the targomaan driver.
+     * 
+     * @return string
+     */
+    protected function translator() : string
+    {
+        return property_exists($this, 'translator')? $this->translator : app('targomaan')->getDefaultDriver();
+    }
 }
