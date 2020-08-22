@@ -56,14 +56,14 @@ class JsonTranslator implements Translator, Serializable
 				$values = $model->fromJson(data_get($model->getAttributes(), $key));
 			}     
 
-			return isset($values[$locale]) ? $values[$locale] : new \stdClass;
+			return array_key_exists($locale, (array) $values) ? $values[$locale] : new \stdClass;
 		});      
 
 		if(! is_object($value) && $model->hasGetMutator($key)) { 
 			return $this->mutateAttribute($model, $key, $value);
 		} 
 
-		return is_object($value) || is_null($value) ? $default : $value; 
+		return is_object($value) ? $default : $value; 
 	}  
 
     /**
