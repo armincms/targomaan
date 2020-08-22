@@ -2,10 +2,12 @@
 
 namespace Armincms\Targomaan\Translators;
 
-use Armincms\Targomaan\Contracts\Translator; 
 use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\JsonEncodingException;
+use Armincms\Targomaan\Contracts\Serializable;
+use Armincms\Targomaan\Contracts\Translator; 
  
-class JsonTranslator implements Translator
+class JsonTranslator implements Translator, Serializable
 { 
 	public function handleTranslations($model)
 	{
@@ -24,18 +26,15 @@ class JsonTranslator implements Translator
 	{    
 		$model::withoutTranslation(function() use ($model, $key, $value, $locale) { 
 			if($model->hasSetMutator($key)) { 
-				$value = $this->getMutatedAttributeValue($model, $key, $value);
-			} 
+				$value = $this->setMutatedAttributeValue($model, $key, $value);
+			}  
 
-			$attributes = data_get($model->getAttributes(), $key);
-
-			$translations = array_merge((array) json_decode($attributes, true), [
+			$values = array_merge((array) json_decode(data_get($model->getAttributes(), $key)), [
 				$locale => $value
 			]);  
 
-			$model->forceFill([
-				$key => json_encode($translations)
-			]);  
+			$model->{$key} = $this->isJsonCastable($model, $key) 
+								? $values : $this->castAttributeAsJson($key, $values); 
 		}); 
 
 		return $this;
@@ -52,22 +51,33 @@ class JsonTranslator implements Translator
 	 */
 	public function getTranslation($model, string $key, string $locale, $default = null)
 	{   
-		$value = $model::withoutTranslation(function() use ($model, $key, $default, $locale) {  
-			$translations = (array) json_decode($model->getOriginal($key), true);
+		$value = $model::withoutTranslation(function() use ($model, $key, $locale) {    
+			if(($values = $model->getAttribute($key)) && ! $this->isJsonCastable($model, $key)) { 
+				$values = $model->fromJson(data_get($model->getAttributes(), $key));
+			}     
 
-			if(json_last_error() !== JSON_ERROR_NONE || ! isset($translations[$locale])) { 
-				return $default;
-			} 
+			return isset($values[$locale]) ? $values[$locale] : new \stdClass;
+		});      
 
-			return $translations[$locale];
-		});   
-
-		if($model->hasGetMutator($key)) {
+		if(! is_object($value) && $model->hasGetMutator($key)) { 
 			return $this->mutateAttribute($model, $key, $value);
-		}
+		} 
 
-		return $value; 
+		return is_object($value) || is_null($value) ? $default : $value; 
 	}  
+
+    /**
+     * Set the value of an attribute using its mutator.
+     *
+     * @param  \Illuminate\Database\Eloquent\Model  $model
+     * @param  string  $key
+     * @param  mixed  $value
+     * @return mixed
+     */
+    protected function setMutatedAttributeValue($model, $key, $value)
+    {
+        return $model->{'set'.Str::studly($key).'Attribute'}($value);
+    }
 
     /**
      * Get the value of an attribute using its mutator.
@@ -93,5 +103,47 @@ class JsonTranslator implements Translator
     protected function mutateAttribute($model, $key, $value)
     {
         return $model->{'get'.Str::studly($key).'Attribute'}($value);
+    }
+
+    /**
+     * Determine whether a value is JSON castable for inbound manipulation.
+     *
+     * @param  string  $key
+     * @return bool
+     */
+    protected function isJsonCastable($model, $key)
+    {
+        return $model->hasCast($key, ['array', 'json', 'object', 'collection']);
+    }
+
+    /**
+     * Cast the given attribute to JSON.
+     *
+     * @param  string  $key
+     * @param  mixed  $value
+     * @return string
+     */
+    protected function castAttributeAsJson($key, $value)
+    {
+        $value = $this->asJson($value);
+
+        if ($value === false) {
+            throw JsonEncodingException::forAttribute(
+                $this, $key, json_last_error_msg()
+            );
+        }
+
+        return $value;
+    }
+
+    /**
+     * Encode the given value as JSON.
+     *
+     * @param  mixed  $value
+     * @return string
+     */
+    protected function asJson($value)
+    {
+        return json_encode($value);
     }
 }
