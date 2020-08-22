@@ -2,10 +2,11 @@
 
 namespace Armincms\Targomaan\Concerns;
 
+use Closure;
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Scope;
 use Armincms\Targomaan\Contracts\Translator;
-use Illuminate\Support\Str;
-use Closure;
+use Armincms\Targomaan\Contracts\Serializable;
 
 trait InteractsWithTargomaan
 {  
@@ -69,7 +70,15 @@ trait InteractsWithTargomaan
 
         if(is_null($value = parent::getAttribute($key)) && static::shouldTranslation()) { 
             return $this->getAttribute($this->localizeKey($key));
-        }  
+        } 
+
+        if($this->targomaan() instanceof Serializable && static::shouldTranslation()) {
+            $default = new \stdClass;
+
+            $translation = $this->targomaan()->getTranslation($this, $key, app()->getLocale(), $default);
+            
+            return $translation != $default ? $translation : $value;
+        } 
 
         return $value;
     } 
@@ -204,5 +213,5 @@ trait InteractsWithTargomaan
     protected function translator() : string
     {
         return property_exists($this, 'translator')? $this->translator : app('targomaan')->getDefaultDriver();
-    }
+    }  
 }
