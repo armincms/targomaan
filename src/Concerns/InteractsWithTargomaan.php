@@ -210,7 +210,7 @@ trait InteractsWithTargomaan
      * 
      * @return string
      */
-    protected function translator() : string
+    public function translator() : string
     {
         return property_exists($this, 'translator')? $this->translator : app('targomaan')->getDefaultDriver();
     }  
