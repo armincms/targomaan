@@ -63,6 +63,8 @@ class SequentialTranslator implements Translator
 		if($locale === $model->{$this->getLocaleKeyName($model)}) {
 			$model->{$key} = $value;
 		} elseif ($locale == app()->getLocale() && is_null($model->{$this->getLocaleKeyName($model)})) {
+			$model->{$this->getLocaleKeyName($model)} = $locale;
+			
 			return $this->setTranslation($model, $key, app()->getLocale(), $value);
 		} else {  
 			$model->addHidden(with($model->getHidden(), function($translations) use ($locale, $key, $value) {
