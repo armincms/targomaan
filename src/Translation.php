@@ -7,9 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Translation extends Model 
 {    
     /**
-     * The attributes that aren't mass assignable.
+     * Indicates if the model should be timestamped.
      *
-     * @var array
+     * @var bool
      */
-    protected $guarded = [];
+    public $timestamps = false; 
 }
