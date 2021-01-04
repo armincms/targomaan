@@ -86,9 +86,7 @@ class LayericTranslator implements Translator
 		$class = $this->getTranslationModel($model);
 
 		return tap(new $class, function($instance) use ($model) { 
-			$instance->setTable(Str::snake(Str::pluralStudly(
-				class_basename($model).'Translation'
-			))); 
+			$instance->setTable($this->getTranslationTable($model)); 
 		}); 
 	}
 
@@ -100,6 +98,22 @@ class LayericTranslator implements Translator
 	protected function getTranslationModel($model)
 	{
 		return defined(get_class($model).'::TRANSLATION_MODEL') ? $model::TRANSLATION_MODEL : Translation::class; 
+	} 
+
+    /**
+     * Get the table name of the "translation".
+     *
+     * @return string
+     */
+	protected function getTranslationTable($model)
+	{
+		if(defined(get_class($model).'::TRANSLATION_TABLE')) {
+			return $model::TRANSLATION_TABLE;
+		}
+
+		return Str::snake(Str::pluralStudly(
+			class_basename($model).'Translation'
+		)); 
 	}
 
     /**
