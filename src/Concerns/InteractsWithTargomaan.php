@@ -68,7 +68,12 @@ trait InteractsWithTargomaan
     		return $this->targomaan()->getTranslation($this, $key, $locale);
     	}
 
-        if(is_null($value = parent::getAttribute($key)) && static::shouldTranslation()) { 
+        if(
+            is_null($value = parent::getAttribute($key)) && 
+            ! method_exists(static::class, $key) && 
+            ! array_key_exists($key, (array) $this->attributes) &&
+            static::shouldTranslation()
+        ) { 
             return $this->getAttribute($this->localizeKey($key));
         } 
 
