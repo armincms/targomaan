@@ -32,7 +32,7 @@ class LayericTranslator implements Translator
 	 */
 	public function setTranslation($model, string $key, string $locale, $value)
 	{   
-		$model->addHidden(with($model->getHidden(), function($translations) use ($locale, $key, $value) {
+		$model->setHidden(with($model->getHidden(), function($translations) use ($locale, $key, $value) {
 			return data_set($translations, "{$locale}.{$key}", $value);
 		})); 
 
