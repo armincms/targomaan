@@ -220,12 +220,13 @@ trait InteractsWithTargomaan
         return property_exists($this, 'translator')? $this->translator : app('targomaan')->getDefaultDriver();
     }  
 
+    /**
+     * Convert the model instance to an array.
+     * 
+     * @return array
+     */ 
     public function toArray()
     {
-        return collect(parent::toArray())->map(function($value, $attribute) {
-            $locale = app()->getLocale(); 
-
-            return is_array($value) && array_key_exists($locale, $value) ? $value[$locale] : $value;
-        })->toArray(); 
+        return $this->targomaan()->toArray($this, parent::toArray());
     }
 }

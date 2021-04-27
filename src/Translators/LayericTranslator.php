@@ -9,6 +9,8 @@ use Armincms\Targomaan\Translation;
  
 class LayericTranslator implements Translator
 {  
+	use InteractsWithTranslations;
+
 	public function saved($model)
 	{   
 		$models = collect($model->getHidden())->filter()->map(function($attributes, $locale) use ($model) { 
@@ -53,11 +55,9 @@ class LayericTranslator implements Translator
 		if(in_array($key, [$this->getLocaleKeyName($model), $model->getKeyName()])) {
 			return $model->getOriginal($key);
 		}
-
-		$model->relationLoaded('translations') || $model->load('translations'); 
 		
 		return data_get(
-			$model->translations->where($this->getLocaleKeyName($model), $locale)->first(), $key, $default
+			$this->getTranslationForLocale($model, $locale), $key, $default
 		); 
 	}  
 
@@ -114,15 +114,5 @@ class LayericTranslator implements Translator
 		return Str::snake(Str::pluralStudly(
 			class_basename($model).'Translation'
 		)); 
-	}
-
-    /**
-     * Get the name of the "locale" column.
-     *
-     * @return string
-     */
-	protected function getLocaleKeyName($model) : string
-	{
-		return defined(get_class($model).'::LOCALE_KEY') ? $model::LOCALE_KEY : 'locale'; 
-	}
+	} 
 }

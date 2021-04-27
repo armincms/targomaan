@@ -24,4 +24,13 @@ interface Translator
 	 * @return mixed          
 	 */
 	public function getTranslation($model, string $key, string $locale, $default = null);
+
+    /**
+     * Convert the model instance to an array.
+     *
+     * @param  \Illuminate\Database\Eloquent\Model $model 
+     * @param  array $attributes 
+     * @return array
+     */ 
+    public function toArray($model, array $attributes): array;
 }

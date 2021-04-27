@@ -146,4 +146,20 @@ class JsonTranslator implements Translator, Serializable
     {
         return json_encode($value);
     }
+
+    /**
+     * Convert the model instance to an array.
+     *
+     * @param  \Illuminate\Database\Eloquent\Model $model 
+     * @param  array $attributes 
+     * @return array
+     */ 
+    public function toArray($model, array $attributes): array
+    {
+        return collect($attributes)->map(function($value, $attribute) {
+            $locale = app()->getLocale(); 
+
+            return is_array($value) && array_key_exists($locale, $value) ? $value[$locale] : $value;
+        })->toArray(); 
+    }
 }

@@ -130,16 +130,5 @@ class SequentialTranslator implements Translator
 	protected function getSequenceKeyName($model) : string
 	{
 		return defined(get_class($model).'::SEQUENCE_KEY') ? $model::SEQUENCE_KEY : 'sequence_key'; 
-	}
-
-    /**
-     * Get the name of the "locale" column.
-     *
-	 * @param  \Illuminate\Database\Eloquent\Model $model 
-     * @return string
-     */
-	protected function getLocaleKeyName($model) : string
-	{
-		return defined(get_class($model).'::LOCALE_KEY') ? $model::LOCALE_KEY : 'locale'; 
-	}
+	} 
 }
