@@ -7,6 +7,8 @@ use Armincms\Targomaan\Contracts\Translator;
  
 class SequentialTranslator implements Translator
 {  
+	use InteractsWithTranslations;
+	
 	/**
 	 * Hanldle saving event.
 	 * 
