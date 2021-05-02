@@ -17,8 +17,8 @@ trait InteractsWithTranslations
 		$model->relationLoaded('translations') || $model->load('translations'); 
 		
 		return $model->translations
-                     ->where($this->getLocaleKeyName($model), $locale)
-                     ->where($model->getKeyName(), '!=', $model->getKey())->first();
+                    ->filter->isNot($model)
+                     ->where($this->getLocaleKeyName($model), $locale)->first(); 
 	} 
 
     /**
