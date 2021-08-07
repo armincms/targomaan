@@ -60,6 +60,17 @@ class LayericTranslator implements Translator
 			$this->getTranslationForLocale($model, $locale), $key, $default
 		); 
 	}  
+	/**
+	 * Get the translation isntance for the gicen locale.
+	 * 
+	 * @param  \Illuminate\Database\Eloquent\Model $model   
+	 * @param  string $locale   
+	 * @return Null\Illuminate\Database\Eloquent\Model $model       
+	 */
+	public function getTranslationForLocale($model, string $locale)
+	{     
+		return $model->translations->where($this->getLocaleKeyName($model), $locale)->first(); 
+	} 
 
 	/**
 	 * Handle translations relationship.
@@ -115,4 +126,20 @@ class LayericTranslator implements Translator
 			class_basename($model).'Translation'
 		)); 
 	} 
+
+    /**
+     * Convert the model instance to an array.
+     *
+     * @param  \Illuminate\Database\Eloquent\Model $model 
+     * @param  array $attributes 
+     * @return array
+     */ 
+    public function toArray($model, array $attributes): array
+    {
+    	if ($translation = $this->getTranslationForLocale($model, app()->getLocale())) {
+    		return array_merge($translation->toArray(), $attributes);
+    	}
+
+    	return $attributes; 
+    }
 }

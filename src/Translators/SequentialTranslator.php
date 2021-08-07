@@ -88,13 +88,17 @@ class SequentialTranslator implements Translator
 	 */
 	public function getTranslation($model, string $key, string $locale, $default = null)
 	{    
-		if(in_array($key, [$this->getSequenceKeyName($model), $this->getLocaleKeyName($model)])) {
+		$localeKey = $this->getLocaleKeyName($model);
+
+		if(in_array($key, [$this->getSequenceKeyName($model), $localeKey])) {
 			return $model->getOriginal($key);
 		}
 
-		! $model::shouldTranslation() || $model->relationLoaded('translations') || $model->load('translations');
-
-		$translation = $model->translations->where($this->getLocaleKeyName($model), $locale)->first();
+		if (! $model::shouldTranslation() || app()->getLocale() == $model->{$localeKey}) {
+			$translation = $model;
+		} else {
+			$translation = $model->translations->where($localeKey, $locale)->first();
+		} 		
 		
 		return $model->withoutTranslation(function() use ($translation, $key, $default) {
 			return data_get($translation, $key, $default); 
@@ -132,5 +136,17 @@ class SequentialTranslator implements Translator
 	protected function getSequenceKeyName($model) : string
 	{
 		return defined(get_class($model).'::SEQUENCE_KEY') ? $model::SEQUENCE_KEY : 'sequence_key'; 
-	} 
+	}
+
+    /**
+     * Convert the model instance to an array.
+     *
+     * @param  \Illuminate\Database\Eloquent\Model $model 
+     * @param  array $attributes 
+     * @return array
+     */ 
+    public function toArray($model, array $attributes): array
+    {
+    	return $attributes;
+    } 
 }
