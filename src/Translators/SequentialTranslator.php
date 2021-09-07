@@ -94,7 +94,7 @@ class SequentialTranslator implements Translator
 			return $model->getOriginal($key);
 		}
 
-		if (! $model::shouldTranslation() || app()->getLocale() == $model->{$localeKey}) {
+		if (! $model::shouldTranslation() || $locale == $model->{$localeKey}) {
 			$translation = $model;
 		} else {
 			$translation = $model->translations->where($localeKey, $locale)->first();
