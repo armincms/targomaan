@@ -31,6 +31,10 @@ trait InteractsWithTargomaan
      */
     public static function bootInteractsWithTargomaan()
     { 
+        static::saving(function() {
+            static::forcedTranslation(false);
+        });
+        
         static::observe($targomaan = (new static)->targomaan());
 
         $targomaan instanceof Scope && static::addGlobalScope($targomaan); 
