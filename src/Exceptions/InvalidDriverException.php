@@ -1,9 +1,9 @@
-<?php 
+<?php
 
 namespace Armincms\Targomaan\Exceptions;
 
 use InvalidArgumentException;
 
-class InvalidDriverException extends InvalidArgumentException 
-{ 
+class InvalidDriverException extends InvalidArgumentException
+{
 }

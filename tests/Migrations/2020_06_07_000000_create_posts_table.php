@@ -15,8 +15,8 @@ class CreatePostsTable extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->json('name')->default('[]'); 
-            $table->json('title')->default('[]'); 
+            $table->json('name')->default('[]');
+            $table->json('title')->default('[]');
             $table->timestamps();
         });
     }

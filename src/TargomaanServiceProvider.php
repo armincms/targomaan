@@ -1,8 +1,8 @@
 <?php
 
 namespace Armincms\Targomaan;
- 
-use Illuminate\Support\ServiceProvider; 
+
+use Illuminate\Support\ServiceProvider;
 
 class TargomaanServiceProvider extends ServiceProvider
 {
@@ -12,8 +12,8 @@ class TargomaanServiceProvider extends ServiceProvider
      * @return void
      */
     public function boot()
-    { 
-    } 
+    {
+    }
 
     /**
      * Register any application services.
@@ -22,7 +22,7 @@ class TargomaanServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('targomaan', function($app) {
+        $this->app->singleton('targomaan', function ($app) {
             return new Targomaan($app);
         });
     }

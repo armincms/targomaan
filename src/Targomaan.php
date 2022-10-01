@@ -1,16 +1,16 @@
 <?php
 
 namespace Armincms\Targomaan;
- 
-use InvalidArgumentException;
+
 use Armincms\Targomaan\Contracts\Translator;
 use Armincms\Targomaan\Translators\JsonTranslator;
-use Armincms\Targomaan\Translators\SequentialTranslator;
 use Armincms\Targomaan\Translators\LayericTranslator;
+use Armincms\Targomaan\Translators\SequentialTranslator;
 use Illuminate\Support\Manager;
- 
+use InvalidArgumentException;
+
 class Targomaan extends Manager
-{   
+{
     /**
      * Create a new driver instance.
      *
@@ -21,11 +21,11 @@ class Targomaan extends Manager
      */
     protected function createDriver($driver)
     {
-    	$instance = parent::createDriver($driver); 
+        $instance = parent::createDriver($driver);
 
-    	if($instance instanceof Translator) {
-    		return $instance;
-    	}
+        if ($instance instanceof Translator) {
+            return $instance;
+        }
 
         throw new InvalidArgumentException("
         	Driver [$driver] should implement the `Armincms\Targomaan\Contracts\Translator` interface.
@@ -39,24 +39,24 @@ class Targomaan extends Manager
      */
     public function getDefaultDriver()
     {
-    	return config('targomaan.default', 'json');
+        return config('targomaan.default', 'json');
     }
 
     /**
      * Create the JSON driver instance.
-     * 
+     *
      * @return mixed
      *
      * @throws \InvalidArgumentException
      */
     public function createJsonDriver()
     {
-    	return new JsonTranslator;
+        return new JsonTranslator;
     }
 
     /**
      * Create Sequential driver instance.
-     * 
+     *
      * @return mixed
      *
      * @throws \InvalidArgumentException
@@ -68,7 +68,7 @@ class Targomaan extends Manager
 
     /**
      * Create the Layeric driver instance.
-     * 
+     *
      * @return mixed
      *
      * @throws \InvalidArgumentException
@@ -77,4 +77,4 @@ class Targomaan extends Manager
     {
         return new LayericTranslator;
     }
-} 
+}

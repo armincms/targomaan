@@ -2,14 +2,14 @@
 
 namespace Armincms\Targomaan;
 
-use Illuminate\Database\Eloquent\Model; 
+use Illuminate\Database\Eloquent\Model;
 
-class Translation extends Model 
-{    
+class Translation extends Model
+{
     /**
      * Indicates if the model should be timestamped.
      *
      * @var bool
      */
-    public $timestamps = false; 
+    public $timestamps = false;
 }
