@@ -33,7 +33,7 @@ class SequentialTranslator implements Translator
      */
     public function saved($model)
     {
-        $models = collect($model->getHidden())->filter()->map(function ($attributes, $locale) use ($model) {
+        $models = collect($model->getTranslationChanges())->filter()->map(function ($attributes, $locale) use ($model) {
             $model::unguarded(function () use ($model, $attributes, $locale) {
                 $sequenceKey = $this->getSequenceKeyName($model);
                 $localeKey = $this->getLocaleKeyName($model);
@@ -67,9 +67,7 @@ class SequentialTranslator implements Translator
 
             return $this->setTranslation($model, $key, app()->getLocale(), $value);
         } else {
-            $model->setHidden(with($model->getHidden(), function ($translations) use ($locale, $key, $value) {
-                return data_set($translations, "{$locale}.{$key}", $value);
-            }));
+            $model->setTranslationChanges($key, $locale, $value);
         }
 
         return $this;

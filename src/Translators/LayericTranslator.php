@@ -11,17 +11,17 @@ class LayericTranslator implements Translator
 {
     use InteractsWithTranslations;
 
+    protected static $translations = [];
+
     public function saved($model)
     {
-        $models = collect($model->getHidden())->filter()->map(function ($attributes, $locale) use ($model) {
+        collect($model->getTranslationChanges())->filter()->map(function ($attributes, $locale) use ($model) {
             $model::unguarded(function () use ($model, $attributes, $locale) {
                 $model->translations()->updateOrCreate([
                     $this->getLocaleKeyName($model) => $locale,
                 ], (array) $attributes);
             });
         });
-
-        $model->setHidden([]);
     }
 
     /**
@@ -34,9 +34,7 @@ class LayericTranslator implements Translator
      */
     public function setTranslation($model, string $key, string $locale, $value)
     {
-        $model->setHidden(with($model->getHidden(), function ($translations) use ($locale, $key, $value) {
-            return data_set($translations, "{$locale}.{$key}", $value);
-        }));
+        $model->setTranslationChanges($key, $locale, $value);
 
         return $this;
     }

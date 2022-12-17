@@ -24,6 +24,8 @@ trait InteractsWithTargomaan
      */
     protected static $delimiter = '::';
 
+    protected $translationChanges = [];
+
     /**
      * Handle events with translators.
      *
@@ -232,5 +234,17 @@ trait InteractsWithTargomaan
     public function toArray()
     {
         return $this->targomaan()->toArray($this, parent::toArray());
+    }
+
+    public function setTranslationChanges(string $key, string $locale, $value)
+    {
+        $this->translationChanges = data_set($this->translationChanges, "{$locale}.{$key}", $value);
+
+        return $this;
+    }
+
+    public function getTranslationChanges()
+    {
+        return $this->translationChanges;
     }
 }
