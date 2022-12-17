@@ -7,7 +7,7 @@
     ],
     "license": "MIT",
     "require": {
-        "php": ">=7.1.0" 
+        "php": ">=7.1.0"
     },
     "require-dev": {
         "orchestra/testbench": "^4.0"
@@ -34,5 +34,5 @@
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
-    "version": "0.4.6"
+    "version": "0.4.7"
 }
